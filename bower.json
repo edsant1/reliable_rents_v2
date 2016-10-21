@@ -1,0 +1,23 @@
+{
+  "name": "reliable_rents_v2",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Edwin"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Materialize": "materialize#^0.97.5",
+    "moment": "^2.11.2"
+  }
+}
