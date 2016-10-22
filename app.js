@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 mongoose.connect( 'mongodb://localhost/reliable_rents_v2' );
 
 var routes = require('./routes/index');
@@ -34,14 +37,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use(require('express-session')({
+  secret: process.env.SESSION_SECRET || 'catsAreAwesome',
+  resave: false,
+  saveUninitialized: false
+}));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+app.use(passport.initialize());
+app.use(passport.session());
+
+var User = require('./models/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//API Routes
+app.use('/api/users', users);
+app.use('*', routes);
+
 
 // error handlers
 
@@ -67,5 +80,13 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.use('*', routes);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 module.exports = app;

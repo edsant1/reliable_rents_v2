@@ -4,12 +4,12 @@ import Home from '../components/Home';
 class App extends React.Component {
 	constructor(props) {
 		super(props);
-	};
+	}
 
 	render() {
 		return(
 			<div>
-				<Home />
+				{this.props.children}
 			</div>
 		)
 	}
