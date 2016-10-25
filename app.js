@@ -11,6 +11,7 @@ var LocalStrategy = require('passport-local').Strategy;
 mongoose.connect( 'mongodb://localhost/reliable_rents_v2' );
 
 var routes = require('./routes/index');
+var auth = require('./routes/auth');
 var users = require('./routes/users');
 
 var app = express();
@@ -52,6 +53,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //API Routes
+app.use('api/auth', auth);
 app.use('/api/users', users);
 app.use('*', routes);
 
